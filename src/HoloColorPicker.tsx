@@ -115,25 +115,29 @@ export class HoloColorPicker extends React.PureComponent<
     if (this.state.pickerSize !== pickerSize) {
       this.setState({ pickerSize })
     }
+    this.fixExpectedPosition()
+  }
+
+  fixExpectedPosition = () => {
     // layout.x, layout.y is always 0
     // we always measure because layout is the same even though picker is moved on the page
     InteractionManager.runAfterInteractions(() => {
       // measure only after (possible) animation ended
       this.refs.pickerContainer &&
-        (this.refs.pickerContainer as any).measure(
+      (this.refs.pickerContainer as any).measure(
           (
-            x: number,
-            y: number,
-            width: number,
-            height: number,
-            pageX: number,
-            pageY: number
+              x: number,
+              y: number,
+              width: number,
+              height: number,
+              pageX: number,
+              pageY: number
           ) => {
             // picker position in the screen
             this._pageX = pageX
             this._pageY = pageY
           }
-        )
+      )
     })
   }
 
