@@ -61,7 +61,7 @@ export class HoloColorPicker extends React.PureComponent<
     this._onOldColorSelected = this._onOldColorSelected.bind(this)
     this._isRTL = I18nManager.isRTL
     this._pickerResponder = createPanResponder({
-      onStart: this._handleColorChange,
+      onStart: this._handlePanResponderStart,
       onMove: this._handleColorChange,
     })
   }
@@ -135,6 +135,25 @@ export class HoloColorPicker extends React.PureComponent<
           }
         )
     })
+  }
+
+  _handlePanResponderStart = ({ x, y }: Point2D) => {
+    this.refs.pickerContainer &&
+    (this.refs.pickerContainer as any).measure(
+        (
+            x: number,
+            y: number,
+            width: number,
+            height: number,
+            pageX: number,
+            pageY: number
+        ) => {
+          // picker position in the screen
+          this._pageX = pageX
+          this._pageY = pageY
+        }
+    )
+    return this._handleColorChange({ x, y })
   }
 
   _handleColorChange = ({ x, y }: Point2D) => {
